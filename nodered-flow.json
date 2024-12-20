@@ -1,0 +1,477 @@
+[
+    {
+        "id": "fc3b7e18a73bc1ad",
+        "type": "tab",
+        "label": "Waste collection calendar injector",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "7298e795ef3a73a4",
+        "type": "inject",
+        "z": "fc3b7e18a73bc1ad",
+        "name": "Inject start",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "iso",
+        "payloadType": "date",
+        "x": 140,
+        "y": 40,
+        "wires": [
+            [
+                "b10ad4223065c4cf"
+            ]
+        ]
+    },
+    {
+        "id": "349448b9126d8027",
+        "type": "http request",
+        "z": "fc3b7e18a73bc1ad",
+        "name": "Get cities",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "https://zys-harmonogram.smok.net.pl/{{region}}/{{year}}/addresses/cities",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 440,
+        "y": 120,
+        "wires": [
+            [
+                "5fb666920ff1e278"
+            ]
+        ]
+    },
+    {
+        "id": "8cf0610ca87c1060",
+        "type": "debug",
+        "z": "fc3b7e18a73bc1ad",
+        "name": "Output",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 950,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "b10ad4223065c4cf",
+        "type": "change",
+        "z": "fc3b7e18a73bc1ad",
+        "name": "Get year (EDIT manually)",
+        "rules": [
+            {
+                "t": "set",
+                "p": "year",
+                "pt": "msg",
+                "to": "2025",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 230,
+        "y": 120,
+        "wires": [
+            [
+                "349448b9126d8027"
+            ]
+        ]
+    },
+    {
+        "id": "5fb666920ff1e278",
+        "type": "change",
+        "z": "fc3b7e18a73bc1ad",
+        "name": "Set cityId",
+        "rules": [
+            {
+                "t": "set",
+                "p": "cityId",
+                "pt": "msg",
+                "to": "$single(payload, function($v, $i, $a) { $v.value = \"TODO\" }).id",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 180,
+        "y": 200,
+        "wires": [
+            [
+                "662e7163419d89b7"
+            ]
+        ]
+    },
+    {
+        "id": "662e7163419d89b7",
+        "type": "http request",
+        "z": "fc3b7e18a73bc1ad",
+        "name": "Get streets",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "https://zys-harmonogram.smok.net.pl/{{region}}/{{year}}/addresses/streets/{{cityId}}",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 450,
+        "y": 200,
+        "wires": [
+            [
+                "ca03b64f69a3b518"
+            ]
+        ]
+    },
+    {
+        "id": "ca03b64f69a3b518",
+        "type": "change",
+        "z": "fc3b7e18a73bc1ad",
+        "name": "Set streetId",
+        "rules": [
+            {
+                "t": "set",
+                "p": "streetId",
+                "pt": "msg",
+                "to": "$single(payload, function($v, $i, $a) { $v.value = \"TODO\" }).id",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 190,
+        "y": 280,
+        "wires": [
+            [
+                "35b96423a6501223"
+            ]
+        ]
+    },
+    {
+        "id": "35b96423a6501223",
+        "type": "http request",
+        "z": "fc3b7e18a73bc1ad",
+        "name": "Get numbers",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "https://zys-harmonogram.smok.net.pl/{{region}}/{{year}}/addresses/numbers/{{cityId}}/{{streetId}}",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 450,
+        "y": 280,
+        "wires": [
+            [
+                "accaf15037197623"
+            ]
+        ]
+    },
+    {
+        "id": "accaf15037197623",
+        "type": "change",
+        "z": "fc3b7e18a73bc1ad",
+        "name": "Set numberId",
+        "rules": [
+            {
+                "t": "set",
+                "p": "numberId",
+                "pt": "msg",
+                "to": "$single(payload, function($v, $i, $a) { $v.value = \"TODO\" }).id",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 200,
+        "y": 360,
+        "wires": [
+            [
+                "1d9a90932740d3b3"
+            ]
+        ]
+    },
+    {
+        "id": "1d9a90932740d3b3",
+        "type": "http request",
+        "z": "fc3b7e18a73bc1ad",
+        "name": "Get report path",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "https://zys-harmonogram.smok.net.pl/{{region}}/{{year}}/reports?type=html&id={{numberId}}",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 460,
+        "y": 360,
+        "wires": [
+            [
+                "c9e6275e413fe742"
+            ]
+        ]
+    },
+    {
+        "id": "c9e6275e413fe742",
+        "type": "change",
+        "z": "fc3b7e18a73bc1ad",
+        "name": "Set report path",
+        "rules": [
+            {
+                "t": "set",
+                "p": "url",
+                "pt": "msg",
+                "to": "payload.filePath",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 200,
+        "y": 440,
+        "wires": [
+            [
+                "19df05dbe854fae8"
+            ]
+        ]
+    },
+    {
+        "id": "19df05dbe854fae8",
+        "type": "http request",
+        "z": "fc3b7e18a73bc1ad",
+        "name": "Get report",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 440,
+        "y": 440,
+        "wires": [
+            [
+                "4f50469674958d01"
+            ]
+        ]
+    },
+    {
+        "id": "4f50469674958d01",
+        "type": "html",
+        "z": "fc3b7e18a73bc1ad",
+        "name": "Get time table",
+        "property": "payload",
+        "outproperty": "payload",
+        "tag": "table",
+        "ret": "html",
+        "as": "single",
+        "chr": "x_",
+        "x": 200,
+        "y": 520,
+        "wires": [
+            [
+                "303df231fc805d0a"
+            ]
+        ]
+    },
+    {
+        "id": "303df231fc805d0a",
+        "type": "function",
+        "z": "fc3b7e18a73bc1ad",
+        "name": "Convert to dates",
+        "func": "function parseWasteCollectionTable(tableHtml) {\n    // Month mappings\n    const months = {\n        Styczeń: '01',\n        Luty: '02',\n        Marzec: '03',\n        Kwiecień: '04',\n        Maj: '05',\n        Czerwiec: '06',\n        Lipiec: '07',\n        Sierpień: '08',\n        Wrzesień: '09',\n        Październik: '10',\n        Listopad: '11',\n        Grudzień: '12',\n    };\n\n    const parser = new xmldom.DOMParser();\n  const doc = parser.parseFromString(`<table>${tableHtml}</table>`, 'text/html');\n\n  const rows = Array.from(doc.getElementsByTagName('tr'));\n  const headers = Array.from(rows[1].getElementsByTagName('th'))\n    .slice(1) // Skip the \"Miesiąc\" header\n    .map(header => header.textContent.trim().split(\" \")[0]);\n\n  const schedule = headers.reduce((acc, header) => {\n    acc[header] = [];\n    return acc;\n  }, {});\n\n  rows.slice(2).forEach(row => {\n    const cells = Array.from(row.getElementsByTagName('td'));\n    const monthName = cells[0].textContent.trim();\n    const month = months[monthName];\n\n    cells.slice(1).forEach((cell, index) => {\n      const dates = cell.textContent.trim();\n      if (dates) {\n        const isoDates = dates.split(',').map(date => \n          `${msg.year}-${month}-${\n            date.trim().length > 1 ? date.trim() : `0${date.trim()}`}T12:00:00.000Z`\n        );\n        if(headers[index] == \"Zmieszane\" || headers[index] == \"Papier\" || headers[index] == \"Choinki\")\n        isoDates.forEach((date) => {\n          node.send({\n            payload: {\n              key: headers[index] == \"Papier\" ? \"Sortowane\" : headers[index],\n              value: date\n            }\n          })\n        });\n      }\n    });\n  });\n\n  return schedule;\n}\nparseWasteCollectionTable(msg.payload);",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "xmldom",
+                "module": "xmldom"
+            }
+        ],
+        "x": 460,
+        "y": 520,
+        "wires": [
+            [
+                "01a8a786c959b2e4"
+            ]
+        ]
+    },
+    {
+        "id": "c94f4dd7222ce929",
+        "type": "api-call-service",
+        "z": "fc3b7e18a73bc1ad",
+        "name": "Add event to calendar",
+        "server": "2467b1b7.eb5bfe",
+        "version": 7,
+        "debugenabled": false,
+        "action": "calendar.create_event",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "calendar.TODO"
+        ],
+        "labelId": [],
+        "data": "{\t  \"summary\": $join([\"Waste collection\",oldPayload.key], \": \"),\t  \"start_date\": $substringBefore(oldPayload.value, \"T\"),\t  \"end_date\": $substringBefore(\t    $fromMillis(\t      $toMillis(oldPayload.value) + 24 * 60 * 60 * 1000\t    ), \"T\"\t  )\t}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "calendar",
+        "service": "create_event",
+        "x": 740,
+        "y": 600,
+        "wires": [
+            [
+                "8cf0610ca87c1060"
+            ]
+        ]
+    },
+    {
+        "id": "01a8a786c959b2e4",
+        "type": "api-call-service",
+        "z": "fc3b7e18a73bc1ad",
+        "name": "Get event from calendar",
+        "server": "2467b1b7.eb5bfe",
+        "version": 7,
+        "debugenabled": false,
+        "action": "calendar.get_events",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "calendar.TODO"
+        ],
+        "labelId": [],
+        "data": "{\t  \"start_date_time\": payload.value,\t  \"end_date_time\": $fromMillis($toMillis(payload.value) + 24 * 60 * 60 * 1000)\t}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [
+            {
+                "property": "oldPayload",
+                "propertyType": "msg",
+                "value": "payload",
+                "valueType": "msg"
+            },
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "results"
+            }
+        ],
+        "queue": "none",
+        "blockInputOverrides": false,
+        "domain": "calendar",
+        "service": "get_events",
+        "x": 230,
+        "y": 600,
+        "wires": [
+            [
+                "ce6a1ce7c9b08bdd"
+            ]
+        ]
+    },
+    {
+        "id": "ce6a1ce7c9b08bdd",
+        "type": "function",
+        "z": "fc3b7e18a73bc1ad",
+        "name": "Filter empty messages",
+        "func": "if (msg.payload[\"calendar.TODO\"].events.length < 1)\n    return msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 600,
+        "wires": [
+            [
+                "c94f4dd7222ce929"
+            ]
+        ]
+    },
+    {
+        "id": "2467b1b7.eb5bfe",
+        "type": "server",
+        "name": "Home Assistant",
+        "version": 5,
+        "addon": false,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": "y|yes|true|on|home|open",
+        "connectionDelay": true,
+        "cacheJson": true,
+        "heartbeat": true,
+        "heartbeatInterval": "30",
+        "areaSelector": "friendlyName",
+        "deviceSelector": "friendlyName",
+        "entitySelector": "friendlyName",
+        "statusSeparator": "at: ",
+        "statusYear": "hidden",
+        "statusMonth": "short",
+        "statusDay": "numeric",
+        "statusHourCycle": "h23",
+        "statusTimeFormat": "h:m",
+        "enableGlobalContextStore": true
+    }
+]
